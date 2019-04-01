@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+      <link rel="stylesheet" type="text/css" href="http://localhost:3000/style.css" />
+  </head>
+  <body>
+      <div class="wrapper">
+        <div id="qr">
+          <p>Scan for support</p>
+        <img src='https://chart.googleapis.com/chart?cht=qr&chl=www.ookamiprojects.com%2Fsupport&chs=180x180&choe=UTF-8&chld=L|2' rel='nofollow' class="qrCode" alt='qr code'>
+      </div>
+        <div id="player" class="yt" hidden="true"></div>
+        <script>
+
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'AJQ3TM-p2QI',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        //event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for  six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING) {
+          $('#player').show();
+          $('#qr').hide();
+          done = true;
+
+        }
+        if(event.data == YT.PlayerState.ENDED){
+            $('#player').hide();
+            $('#qr').show();
+            done = false;
+
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+    $(function () {
+      var socket = io();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('fun', function(msg){
+        console.log("message received");
+        console.log(done);
+        if(done == false){
+          switch (parseInt(msg)%4) {
+            case 0:
+              player.loadVideoById({videoId:"Zqpue1x1lqQ",startSeconds:1, endSeconds:21});
+            break;
+            case 1:
+              player.loadVideoById({videoId:"0n_Ty_72Qds",startSeconds:84, endSeconds:86});
+            break;
+            case 2:
+              player.loadVideoById({videoId:"vZVaPiyoqkI",startSeconds:112, endSeconds:120});
+            break;
+            case 3:
+              player.loadVideoById({videoId:"UC4vz6IbdtY",startSeconds:150, endSeconds:160});
+            break;
+            default:
+            console.log("error");
+
+          }
+          $('#player').show();
+          player.playVideo();
+        }
+      });
+    });
+  </script>
+  </body>
+</html>

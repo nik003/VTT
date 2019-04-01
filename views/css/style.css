@@ -1,0 +1,26 @@
+
+.tableMod{
+width: 100%;
+max-width: 100%;
+text-align: center;
+font-size: inherit;
+}
+
+
+table tr:nth-child(odd) {
+   background-color: #00394d;
+}
+body{
+  background-color: #0e629b;
+  color:white;
+  text-align: center;
+}
+.table td{
+border-top: 1px solid black;
+font-size: inherit;
+
+}
+.defaultBg{
+background-color: #0e629b;
+
+}
